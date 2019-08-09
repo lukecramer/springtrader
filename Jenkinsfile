@@ -83,6 +83,16 @@ stage("Deploy to Production") {
           sh "skaffold deploy -a image.json -n ${TILLER_NAMESPACE}"
         }
       }
+      post {
+        success {
+          notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionNamespace}/spring-nanotrader-web/"])
+        }
+        failure {
+          notifyStageEnd([result: "fail"])
+        }
+      }
+    }
+
   }
   post {
     success {
@@ -95,13 +105,3 @@ stage("Deploy to Production") {
     }
   }
 }
-
-      post {
-        success {
-          notifyStageEnd([status: "Successfully deployed to production:\nspringtrader.${env.productionNamespace}/spring-nanotrader-web/"])
-        }
-        failure {
-          notifyStageEnd([result: "fail"])
-        }
-      }
-    }
